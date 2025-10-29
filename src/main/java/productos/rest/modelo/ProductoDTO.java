@@ -1,32 +1,19 @@
-package productos.modelo;
+package productos.rest.modelo;
 
-import jakarta.persistence.*;
+import productos.modelo.Categoria;
 
-@Entity
-@Table(name = "productos")
-public class Producto {
+public class ProductoDTO {
 	
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	private String nombre;
 	private String descripcion;
-	private float precio;
-	private int stock;
+	private Float precio;
+	private Integer stock;
 	private Categoria categoria;
-	private boolean activo = true;
+	private Boolean activo;
 	
-	public Producto() {
+	public ProductoDTO() {
 		
-	}
-
-	public Producto(String nombre, String descripcion, float precio, int stock, Categoria categoria) {
-		super();
-		this.nombre = nombre;
-		this.descripcion = descripcion;
-		this.precio = precio;
-		this.stock = stock;
-		this.categoria = categoria;
 	}
 	
 	public Long getId() {
@@ -47,16 +34,16 @@ public class Producto {
 	public void setDescripcion(String descripcion) {
 		this.descripcion = descripcion;
 	}
-	public float getPrecio() {
+	public Float getPrecio() {
 		return precio;
 	}
-	public void setPrecio(float precio) {
+	public void setPrecio(Float precio) {
 		this.precio = precio;
 	}
-	public int getStock() {
+	public Integer getStock() {
 		return stock;
 	}
-	public void setStock(int stock) {
+	public void setStock(Integer stock) {
 		this.stock = stock;
 	}
 	public Categoria getCategoria() {
@@ -66,12 +53,11 @@ public class Producto {
 		this.categoria = categoria;
 	}
 
-	public boolean isActivo() {
+	public Boolean isActivo() {
 		return activo;
 	}
 
-	public void setActivo(boolean activo) {
+	public void setActivo(Boolean activo) {
 		this.activo = activo;
 	}
-	
 }
