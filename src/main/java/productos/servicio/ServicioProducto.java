@@ -41,7 +41,7 @@ public class ServicioProducto implements IServicioProducto {
 		if (productoDTO.getStock() <= 0)
 			throw new IllegalArgumentException("stock: no puede 0 ni ser nulo");
 
-		if (productoDTO.getCategoria() == null) {
+		if (productoDTO.getCategoria() == null ) {
 		    throw new IllegalArgumentException("La categoria es inválida o no proporcionada");
 		}
 
@@ -58,6 +58,32 @@ public class ServicioProducto implements IServicioProducto {
 			Producto producto = p.get();
 			producto.setActivo(false);
 			repositorioProducto.save(producto);
+		} else {
+			throw new EntidadNoEncontrada("Producto no encontrado con id: " + idProducto);
+		}
+	}
+	
+	@Override
+	public void activarProducto(Long idProducto) throws RepositorioException, EntidadNoEncontrada {
+
+		Optional<Producto> p = repositorioProducto.findById(idProducto);
+
+		if (p.isPresent()) {
+			Producto producto = p.get();
+			producto.setActivo(true);
+			repositorioProducto.save(producto);
+		} else {
+			throw new EntidadNoEncontrada("Producto no encontrado con id: " + idProducto);
+		}
+	}
+	
+	@Override
+	public Producto getProducto(Long idProducto) throws RepositorioException, EntidadNoEncontrada {
+		Optional<Producto> p = repositorioProducto.findById(idProducto);
+
+		if (p.isPresent()) {
+			Producto producto = p.get();
+			return producto;
 		} else {
 			throw new EntidadNoEncontrada("Producto no encontrado con id: " + idProducto);
 		}
@@ -88,24 +114,31 @@ public class ServicioProducto implements IServicioProducto {
 		return repositorioProducto.findAll(pageable);
 
 	}
+	
+	public Page<Producto> getListadoProductosActivos(Pageable pageable) throws RepositorioException {
+		return repositorioProducto.findByActivoTrue(pageable);
+
+	}
+	
+	public Page<Producto> getListadoProductosInactivos(Pageable pageable) throws RepositorioException {
+		return repositorioProducto.findByActivoFalse(pageable);
+
+	}
 
 	@Override
-	public Page<Producto> filtrarProductos(Pageable pageable, String nombre, String categoria, float minPrecio,
-			float maxPrecio) throws RepositorioException {
+	public Page<Producto> filtrarProductos(Pageable pageable, String nombre, String categoria, Float minPrecio,
+			Float maxPrecio) throws RepositorioException {
 
-		if (nombre == null || nombre.isEmpty())
-			throw new IllegalArgumentException("nombre: no debe ser nulo ni vacio");
-
-		Categoria cat;
+		Categoria cat = null;
+		
+		if(categoria != null && !categoria.isBlank()) {
 
 		try {
 			cat = Categoria.valueOf(categoria.toUpperCase());
 		} catch (IllegalArgumentException e) {
 			throw new IllegalArgumentException("categoria: no es una categoria valida");
 		}
-
-		if (minPrecio < 0)
-			throw new IllegalArgumentException("precio: no puede ser nulo");
+	}
 
 		return repositorioProducto.buscar(nombre, cat, minPrecio, maxPrecio, pageable);
 	}

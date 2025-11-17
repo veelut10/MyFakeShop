@@ -1,11 +1,19 @@
 package productos.rest.modelo;
 
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import productos.modelo.Categoria;
 
 public class ProductoDTO {
 	
 	private Long id;
+	
+	@NotNull(message = "La descripción no puede ser nula")
+	@NotBlank(message = "El nombre no puede estar vacío")
 	private String nombre;
+	
+	@NotNull(message = "La descripción no puede ser nula")
+	@NotBlank(message = "La descripción no puede estar vacía")
 	private String descripcion;
 	private Float precio;
 	private Integer stock;
